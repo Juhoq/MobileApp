@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appivol1.ui.theme.Appivol1Theme
 
+
+// Main Activity class
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,18 +48,28 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun Appi() {
+    // State for toggling the dark theme
     val isDarkTheme = remember { mutableStateOf(false) }
-    Appivol1Theme(darkTheme = isDarkTheme.value) {
+    val colors = if (isDarkTheme.value) darkColorScheme() else lightColorScheme()
+
+    // Applies the custom theme, changes based on the isDarkTheme state
+    MaterialTheme(
+        colorScheme = colors,
+        typography = MaterialTheme.typography
+    )  {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            // LazyColumn is a vertically scrolling list that only composes elements currently in view
             LazyColumn(
                 modifier = Modifier.padding(20.dp)
             ) {
                 item {
+                    // Image composable to display a picture
                     Image(
                         painter = painterResource(id = R.drawable.pepe),
                         contentDescription = "pepe",
@@ -68,19 +80,20 @@ fun Appi() {
                         contentScale = ContentScale.Crop
                     )
                 }
-
+                //spacer for padding
                 item { Spacer(modifier = Modifier.height(50.dp)) }
 
+                // Loop to create multiple Text composables
                 items(20) { index ->
                     Text(
                         text = "Pepe $index",
-                        fontSize = (20 + index).sp, // Example of varying font size
+                        fontSize = (20 + index).sp, //font size
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                 }
-
+                // Button to toggle the dark theme
                 item {
                     Button(onClick = { isDarkTheme.value = !isDarkTheme.value }) {
                         Text(text = "Dark Theme")
@@ -91,21 +104,8 @@ fun Appi() {
     }
 }
 
-@Composable
-fun Appivol1Theme(darkTheme: Boolean = false, content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        darkColorScheme()
-    } else {
-        lightColorScheme()
-    }
 
-    MaterialTheme(
-        colorScheme = colors,
-        typography = MaterialTheme.typography,
-        content = content
-    )
-}
-
+// Preview function for the Appi composable
 @Preview(showBackground = true)
 @Composable
 fun AppiPreview() {
